@@ -15,92 +15,90 @@
   <link rel="icon" type="image/png" href="src/assets/app-icon.png">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="src/styles/main.css">
+  <!-- <link rel="stylesheet" href="src/styles/main.css"> -->
+
+  <!-- Tailwind CSS -->
+  <script src="src/config/tailwind.config.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Web Components -->
+  <script type="module" src="src/components/AppHeader.js"></script>
+  <script type="module" src="src/components/AppFooter.js"></script>
 </head>
 
-<body>
-  <header>
-    <div class="container nav-container">
-      <a href="/" class="logo" id="logo">
-        <img src="src/assets/app-icon.png" alt="zen-image logo" style="width: 32px; height: 32px; border-radius: 8px;">
-        zen-image
-      </a>
-    </div>
-  </header>
+<body class="bg-bg text-text-primary antialiased font-sans flex flex-col min-h-screen">
+  <app-header></app-header>
 
-  <main class="container">
-    <div class="fade-in" style="padding: 2rem 0;">
-      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
-        <a href="/" class="btn" style="padding: 0.5rem; border-radius: 50%; background: #eee;">
+  <main class="max-w-custom mx-auto px-8 flex-1 w-full">
+    <div class="animate-fade-in py-8">
+      <!-- Page Header -->
+      <div class="flex items-center gap-4 mb-8">
+        <a href="/" class="p-2 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
         </a>
-        <h2 style="font-size: 2rem;">Image Resizer</h2>
+        <h2 class="text-3xl font-semibold">Image Resizer</h2>
       </div>
 
-      <div class="grid grid-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Left: Upload & Preview -->
-        <div class="card" id="drop-zone"
-          style="min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed var(--border-color); cursor: pointer;">
-          <div id="preview-container"
-            style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">
-            <img id="preview-img" style="width: 100%; height: 100%; object-fit: contain;">
+        <div
+          class="card bg-white rounded-[20px] p-8 shadow-sm transition-all duration-300 border border-border min-h-[400px] flex flex-col items-center justify-center cursor-pointer relative"
+          id="drop-zone">
+          <div id="preview-container" class="w-full h-full hidden flex items-center justify-center">
+            <img id="preview-img" class="w-full h-full object-contain max-h-[400px]">
           </div>
-          <div id="upload-prompt" style="text-align: center;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🖼️</div>
-            <p style="font-weight: 600;">이미지를 드래그하거나 클릭하여 업로드</p>
-            <p style="color: var(--text-secondary); font-size: 0.9rem;">PNG, JPG, WebP 지원</p>
+
+          <div id="upload-prompt" class="text-center">
+            <div class="text-5xl mb-4">🖼️</div>
+            <p class="font-semibold mb-1">이미지를 드래그하거나 클릭하여 업로드</p>
+            <p class="text-text-secondary text-sm">PNG, JPG, WebP 지원</p>
           </div>
+
           <input type="file" id="file-input" hidden accept="image/*">
         </div>
 
         <!-- Right: Options -->
-        <div class="card">
-
-
+        <div class="bg-white rounded-[20px] p-8 shadow-sm transition-all duration-300 border border-border h-fit">
           <div id="controls-resize">
-            <h3 style="margin-bottom: 1.5rem;">Resize Options</h3>
+            <h3 class="text-xl font-semibold mb-6">Resize Options</h3>
 
-            <div style="margin-bottom: 1.5rem;">
-              <label
-                style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Width
-                (px)</label>
-              <input type="number" id="input-width" class="btn"
-                style="width: 100%; border: 1px solid var(--border-color); text-align: left; background: white;"
+            <div class="mb-6">
+              <label class="block text-sm text-text-secondary mb-2">Width (px)</label>
+              <input type="number" id="input-width"
+                class="w-full border border-border p-3 rounded-xl text-left bg-white focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all"
                 placeholder="1920" value="1920">
             </div>
 
-            <div style="margin-bottom: 1.5rem;">
-              <label
-                style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Height
-                (px)</label>
-              <input type="number" id="input-height" class="btn"
-                style="width: 100%; border: 1px solid var(--border-color); text-align: left; background: white;"
+            <div class="mb-6">
+              <label class="block text-sm text-text-secondary mb-2">Height (px)</label>
+              <input type="number" id="input-height"
+                class="w-full border border-border p-3 rounded-xl text-left bg-white focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all"
                 placeholder="1080" value="1080">
             </div>
 
-            <div style="margin-bottom: 2rem; display: flex; align-items: center; gap: 0.5rem;">
-              <input type="checkbox" id="check-lock" checked style="width: 18px; height: 18px;">
-              <label for="check-lock" style="font-size: 0.95rem; cursor: pointer;">비율 고정</label>
+            <div class="mb-8 flex items-center gap-2">
+              <input type="checkbox" id="check-lock" checked
+                class="w-4 h-4 rounded border-gray-300 text-accent focus:ring-accent">
+              <label for="check-lock" class="text-sm cursor-pointer select-none">비율 고정</label>
             </div>
           </div>
 
-
-
-          <div id="info-panel"
-            style="display: none; margin-bottom: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 12px; font-size: 0.9rem;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+          <div id="info-panel" class="hidden mb-8 p-4 bg-bg rounded-xl text-sm">
+            <div class="flex justify-between mb-2">
               <span>Original:</span>
-              <span id="info-original-size" style="font-weight: 600;"></span>
+              <span id="info-original-size" class="font-semibold"></span>
             </div>
-            <div style="display: flex; justify-content: space-between;">
+            <div class="flex justify-between">
               <span>Expected:</span>
-              <span id="info-expected-size" style="font-weight: 600; color: var(--accent-color);"></span>
+              <span id="info-expected-size" class="font-semibold text-accent"></span>
             </div>
           </div>
 
-          <button id="btn-download" class="btn btn-primary" style="width: 100%;" disabled>
+          <button id="btn-download"
+            class="w-full inline-flex items-center justify-center px-6 py-4 rounded-xl font-medium transition-all duration-300 gap-2 bg-accent text-white hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
@@ -113,11 +111,7 @@
     </div>
   </main>
 
-  <footer
-    style="margin-top: 4rem; padding: 2rem 0; border-top: 1px solid var(--border-color); text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
-    <p>Copyright &copy; <a href="https://rukawa-dev.github.io/land-gate/" target="_blank"
-        style="color: inherit; text-decoration: none; font-weight: 600;">SOFT-LAND</a>. All rights reserved.</p>
-  </footer>
+  <app-footer></app-footer>
 
   <script type="module" src="src/pages/resizer.js"></script>
 </body>

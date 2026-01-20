@@ -15,68 +15,74 @@
   <link rel="icon" type="image/png" href="src/assets/app-icon.png">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="src/styles/main.css">
+  <!-- <link rel="stylesheet" href="src/styles/main.css"> -->
+
+  <!-- Tailwind CSS -->
+  <script src="src/config/tailwind.config.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Web Components -->
+  <script type="module" src="src/components/AppHeader.js"></script>
+  <script type="module" src="src/components/AppFooter.js"></script>
 </head>
 
-<body>
-  <header>
-    <div class="container nav-container">
-      <a href="/" class="logo" id="logo">
-        <img src="src/assets/app-icon.png" alt="zen-image logo" style="width: 32px; height: 32px; border-radius: 8px;">
-        zen-image
-      </a>
-    </div>
-  </header>
+<body class="bg-bg text-text-primary antialiased font-sans flex flex-col min-h-screen">
+  <app-header></app-header>
 
-  <main class="container">
-    <div class="fade-in" style="padding: 2rem 0;">
-      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
-        <a href="/" class="btn" style="padding: 0.5rem; border-radius: 50%; background: #eee;">
+  <main class="max-w-custom mx-auto px-8 flex-1 w-full">
+    <div class="animate-fade-in py-8">
+      <!-- Page Header -->
+      <div class="flex items-center gap-4 mb-8">
+        <a href="/" class="p-2 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
         </a>
-        <h2 style="font-size: 2rem;">App Icon Trimmer</h2>
+        <h2 class="text-3xl font-semibold">App Icon Trimmer</h2>
       </div>
 
-      <div class="grid grid-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Left: Upload & Target Selection -->
-        <div class="card" id="drop-zone"
-          style="min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed var(--border-color); cursor: pointer;">
-          <div id="preview-container"
-            style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">
-            <img id="preview-img"
-              style="max-width: 100%; max-height: 350px; border-radius: 8px; box-shadow: var(--shadow-md);">
+        <div
+          class="card bg-white rounded-[20px] p-8 shadow-sm transition-all duration-300 border border-border min-h-[400px] flex flex-col items-center justify-center cursor-pointer relative"
+          id="drop-zone">
+          <div id="preview-container" class="w-full h-full hidden flex items-center justify-center">
+            <img id="preview-img" class="w-full h-full object-contain max-h-[350px] rounded-lg shadow-md">
           </div>
-          <div id="upload-prompt" style="text-align: center;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>
-            <p style="font-weight: 600;">아이콘 원본 이미지(추천: 1024x1024) 업로드</p>
-            <p style="color: var(--text-secondary); font-size: 0.9rem;">PNG, JPG, WebP 지원</p>
+
+          <div id="upload-prompt" class="text-center">
+            <div class="text-5xl mb-4">📱</div>
+            <p class="font-semibold mb-1">아이콘 원본 이미지(추천: 1024x1024) 업로드</p>
+            <p class="text-text-secondary text-sm">PNG, JPG, WebP 지원</p>
           </div>
+
           <input type="file" id="file-input" hidden accept="image/*">
         </div>
 
         <!-- Right: Options & Group Export -->
-        <div class="card">
-          <h3 style="margin-bottom: 1.5rem;">Export Options</h3>
+        <div class="bg-white rounded-[20px] p-8 shadow-sm transition-all duration-300 border border-border h-fit">
+          <h3 class="text-xl font-semibold mb-6">Export Options</h3>
 
-          <div style="margin-bottom: 2rem;">
-            <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; cursor: pointer;">
-              <input type="checkbox" id="check-ios" checked style="width: 18px; height: 18px;">
-              <span>iOS Icon Set (9 sizes)</span>
+          <div class="mb-8">
+            <label class="flex items-center gap-3 mb-4 cursor-pointer select-none">
+              <input type="checkbox" id="check-ios" checked
+                class="w-5 h-5 rounded border-gray-300 text-accent focus:ring-accent">
+              <span class="text-sm">iOS Icon Set (9 sizes)</span>
             </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; cursor: pointer;">
-              <input type="checkbox" id="check-android" checked style="width: 18px; height: 18px;">
-              <span>Android Icon Set (6 sizes)</span>
+            <label class="flex items-center gap-3 mb-4 cursor-pointer select-none">
+              <input type="checkbox" id="check-android" checked
+                class="w-5 h-5 rounded border-gray-300 text-accent focus:ring-accent">
+              <span class="text-sm">Android Icon Set (6 sizes)</span>
             </label>
           </div>
 
-          <div id="status-panel"
-            style="display: none; margin-bottom: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 12px; font-size: 0.9rem;">
-            <p id="status-text" style="color: var(--text-secondary);">준비 완료</p>
+          <div id="status-panel" class="hidden mb-8 p-4 bg-bg rounded-xl text-sm">
+            <p id="status-text" class="text-text-secondary">준비 완료</p>
           </div>
 
-          <button id="btn-export" class="btn btn-primary" style="width: 100%;" disabled>
+          <button id="btn-export"
+            class="w-full inline-flex items-center justify-center px-6 py-4 rounded-xl font-medium transition-all duration-300 gap-2 bg-accent text-white hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
@@ -89,10 +95,7 @@
     </div>
   </main>
 
-  <footer
-    style="margin-top: 4rem; padding: 2rem 0; border-top: 1px solid var(--border-color); text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
-    <p>&copy; 2026 zen-image. All rights reserved.</p>
-  </footer>
+  <app-footer></app-footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script type="module" src="src/pages/trimmer.js"></script>

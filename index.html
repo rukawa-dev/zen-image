@@ -16,32 +16,34 @@
   <link rel="icon" type="image/png" href="src/assets/app-icon.png">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="src/styles/main.css">
+  <!-- <link rel="stylesheet" href="src/styles/main.css"> -->
+
+  <!-- Tailwind CSS -->
+  <script src="src/config/tailwind.config.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Web Components -->
+  <script type="module" src="src/components/AppHeader.js"></script>
+  <script type="module" src="src/components/AppFooter.js"></script>
 </head>
 
-<body>
-  <header>
-    <div class="container nav-container">
-      <a href="/" class="logo" id="logo">
-        <img src="src/assets/app-icon.png" alt="zen-image logo" style="width: 32px; height: 32px; border-radius: 8px;">
-        zen-image
-      </a>
-    </div>
-  </header>
+<body class="bg-bg text-text-primary antialiased font-sans flex flex-col min-h-screen">
+  <app-header></app-header>
 
-  <main class="container">
-    <section class="fade-in" style="padding: 4rem 0; text-align: center;">
-      <h1 style="font-size: 3rem; margin-bottom: 1rem;">Simple. Pure. <span
-          style="color: var(--accent-color)">Zen.</span></h1>
-      <p style="color: var(--text-secondary); font-size: 1.2rem; max-width: 600px; margin: 0 auto 3rem;">
+  <main class="max-w-custom mx-auto px-8 flex-1 w-full">
+    <section class="animate-fade-in py-16 text-center">
+      <h1 class="text-5xl font-semibold mb-4 tracking-tight">Simple. Pure. <span class="text-accent">Zen.</span></h1>
+      <p class="text-text-secondary text-lg max-w-[600px] mx-auto mb-12 leading-relaxed">
         복잡한 옵션에 지치셨나요? zen-image는 당신의 작업에만 집중할 수 있는
         가장 간결하고 강력한 이미지 유틸리티를 제공합니다.
       </p>
 
-      <div class="grid grid-3" style="margin-top: 2rem;">
-        <a href="/resizer.html" class="card" style="text-decoration: none; color: inherit; text-align: left;">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+        <!-- Card: Resizer -->
+        <a href="/resizer.html"
+          class="bg-white rounded-[20px] p-8 shadow-sm hover:shadow-md transition-all duration-300 border border-border text-left group">
           <div
-            style="width: 48px; height: 48px; background: #eef2f7; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+            class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center mb-6 text-accent group-hover:scale-110 transition-transform duration-300">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect>
@@ -49,13 +51,15 @@
               <line x1="12" y1="7" x2="12" y2="17"></line>
             </svg>
           </div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Image Resizer</h3>
-          <p style="color: var(--text-secondary);">품질 손실 없이 순식간에 이미지 크기를 변경하세요. 종횡비 고정, 실시간 미리보기를 지원합니다.</p>
+          <h3 class="text-2xl font-semibold mb-2 text-text-primary">Image Resizer</h3>
+          <p class="text-text-secondary">품질 손실 없이 순식간에 이미지 크기를 변경하세요. 종횡비 고정, 실시간 미리보기를 지원합니다.</p>
         </a>
 
-        <a href="/cropper.html" class="card" style="text-decoration: none; color: inherit; text-align: left;">
+        <!-- Card: Cropper -->
+        <a href="/cropper.html"
+          class="bg-white rounded-[20px] p-8 shadow-sm hover:shadow-md transition-all duration-300 border border-border text-left group">
           <div
-            style="width: 48px; height: 48px; background: #eef2f7; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+            class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center mb-6 text-accent group-hover:scale-110 transition-transform duration-300">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <rect x="5" y="5" width="14" height="14" rx="2" ry="2"></rect>
@@ -63,13 +67,15 @@
               <line x1="9" y1="5" x2="9" y2="19"></line>
             </svg>
           </div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Image Cropper</h3>
-          <p style="color: var(--text-secondary);">원하는 비율로 이미지를 자유롭게 자르세요. 16:9, 1:1 등 다양한 프리셋을 지원합니다.</p>
+          <h3 class="text-2xl font-semibold mb-2 text-text-primary">Image Cropper</h3>
+          <p class="text-text-secondary">원하는 비율로 이미지를 자유롭게 자르세요. 16:9, 1:1 등 다양한 프리셋을 지원합니다.</p>
         </a>
 
-        <a href="/trimmer.html" class="card" style="text-decoration: none; color: inherit; text-align: left;">
+        <!-- Card: Trimmer -->
+        <a href="/trimmer.html"
+          class="bg-white rounded-[20px] p-8 shadow-sm hover:shadow-md transition-all duration-300 border border-border text-left group">
           <div
-            style="width: 48px; height: 48px; background: #eef2f7; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+            class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center mb-6 text-accent group-hover:scale-110 transition-transform duration-300">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 3h18v18H3z"></path>
@@ -79,18 +85,14 @@
               <path d="M3 15h18"></path>
             </svg>
           </div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">App Icon Trimmer</h3>
-          <p style="color: var(--text-secondary);">하나의 이미지로 iOS 및 Android 아이콘 세트를 자동 생성합니다. 규격에 맞춘 정밀한 절삭을 지원합니다.</p>
+          <h3 class="text-2xl font-semibold mb-2 text-text-primary">App Icon Trimmer</h3>
+          <p class="text-text-secondary">하나의 이미지로 iOS 및 Android 아이콘 세트를 자동 생성합니다. 규격에 맞춘 정밀한 절삭을 지원합니다.</p>
         </a>
       </div>
     </section>
   </main>
 
-  <footer
-    style="margin-top: 4rem; padding: 2rem 0; border-top: 1px solid var(--border-color); text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
-    <p>Copyright &copy; <a href="https://rukawa-dev.github.io/land-gate/" target="_blank"
-        style="color: inherit; text-decoration: none; font-weight: 600;">SOFT-LAND</a>. All rights reserved.</p>
-  </footer>
+  <app-footer></app-footer>
 </body>
 
 </html>
