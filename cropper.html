@@ -22,100 +22,83 @@
   <!-- Web Components -->
   <script type="module" src="src/components/AppHeader.js"></script>
   <script type="module" src="src/components/AppFooter.js"></script>
+  <script type="module" src="src/components/AppLayout.js"></script>
 </head>
 
 <body class="bg-bg text-text-primary antialiased font-sans flex flex-col min-h-screen">
-  <app-header></app-header>
+  <app-layout page-title="Image Cropper">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Left: Upload & Preview -->
+      <div
+        class="card bg-surface/40 backdrop-blur-sm rounded-[24px] p-8 shadow-md transition-all duration-300 border border-border/50 min-h-[400px] flex flex-col items-center justify-center cursor-pointer relative group overflow-hidden"
+        id="drop-zone">
+        <div
+          class="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+        </div>
+        <div id="preview-container"
+          class="w-full h-auto hidden relative overflow-hidden shadow-lg select-none z-10 rounded-lg">
+          <img id="preview-img" class="w-full h-full object-cover block">
+        </div>
 
-  <main class="max-w-custom mx-auto px-8 flex-1 w-full">
-    <div class="animate-fade-in py-8">
-      <!-- Page Header -->
-      <div class="flex items-center gap-4 mb-8">
-        <a href="/"
-          class="group flex items-center justify-center w-10 h-10 rounded-full bg-surface/40 backdrop-blur-md border border-border/50 text-accent hover:bg-accent hover:text-bg transition-all duration-300">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            class="group-hover:-translate-x-0.5 transition-transform">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </a>
-        <h2 class="text-3xl font-semibold">Image Cropper</h2>
+        <div id="upload-prompt" class="text-center">
+          <div class="text-5xl mb-4">✂️</div>
+          <p class="font-semibold mb-1">이미지를 드래그하거나 클릭하여 업로드</p>
+          <p class="text-text-secondary text-sm">PNG, JPG, WebP 지원</p>
+        </div>
+
+        <input type="file" id="file-input" hidden accept="image/*">
+
+        <button id="btn-reset"
+          class="mt-4 bg-slate-100 text-text-secondary px-4 py-2 rounded-xl text-sm hidden hover:bg-slate-200 transition-colors">
+          이미지 초기화
+        </button>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- Left: Upload & Preview -->
-        <div
-          class="card bg-surface/40 backdrop-blur-sm rounded-[24px] p-8 shadow-md transition-all duration-300 border border-border/50 min-h-[400px] flex flex-col items-center justify-center cursor-pointer relative group overflow-hidden"
-          id="drop-zone">
-          <div
-            class="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-          </div>
-          <div id="preview-container"
-            class="w-full h-auto hidden relative overflow-hidden shadow-lg select-none z-10 rounded-lg">
-            <img id="preview-img" class="w-full h-full object-cover block">
-          </div>
+      <!-- Right: Options -->
+      <div
+        class="bg-surface/40 backdrop-blur-sm rounded-[24px] p-8 shadow-md transition-all duration-300 border border-border/50 h-fit">
+        <h3 class="text-xl font-semibold mb-6">Crop Options</h3>
 
-          <div id="upload-prompt" class="text-center">
-            <div class="text-5xl mb-4">✂️</div>
-            <p class="font-semibold mb-1">이미지를 드래그하거나 클릭하여 업로드</p>
-            <p class="text-text-secondary text-sm">PNG, JPG, WebP 지원</p>
-          </div>
-
-          <input type="file" id="file-input" hidden accept="image/*">
-
-          <button id="btn-reset"
-            class="mt-4 bg-slate-100 text-text-secondary px-4 py-2 rounded-xl text-sm hidden hover:bg-slate-200 transition-colors">
-            이미지 초기화
-          </button>
+        <div class="grid grid-cols-3 gap-2 mb-6">
+          <!-- Ratio Buttons with arbitrary variants for .active class -->
+          <button
+            class="btn-ratio px-4 py-3 text-sm border border-border/50 rounded-xl bg-bg/50 text-text-secondary hover:bg-accent/10 hover:text-accent transition-all [&.active]:bg-accent [&.active]:text-bg [&.active]:border-accent [&.active]:font-bold"
+            data-ratio="original">Original</button>
+          <button
+            class="btn-ratio active px-4 py-3 text-sm border border-border/50 rounded-xl bg-bg/50 text-text-secondary hover:bg-accent/10 hover:text-accent transition-all [&.active]:bg-accent [&.active]:text-bg [&.active]:border-accent [&.active]:font-bold"
+            data-ratio="16:9">16:9</button>
+          <button
+            class="btn-ratio px-4 py-3 text-sm border border-border/50 rounded-xl bg-bg/50 text-text-secondary hover:bg-accent/10 hover:text-accent transition-all [&.active]:bg-accent [&.active]:text-bg [&.active]:border-accent [&.active]:font-bold"
+            data-ratio="4:3">4:3</button>
+          <button
+            class="btn-ratio px-4 py-3 text-sm border border-border/50 rounded-xl bg-bg/50 text-text-secondary hover:bg-accent/10 hover:text-accent transition-all [&.active]:bg-accent [&.active]:text-bg [&.active]:border-accent [&.active]:font-bold"
+            data-ratio="1:1">1:1</button>
         </div>
 
-        <!-- Right: Options -->
-        <div
-          class="bg-surface/40 backdrop-blur-sm rounded-[24px] p-8 shadow-md transition-all duration-300 border border-border/50 h-fit">
-          <h3 class="text-xl font-semibold mb-6">Crop Options</h3>
-
-          <div class="grid grid-cols-3 gap-2 mb-6">
-            <!-- Ratio Buttons with arbitrary variants for .active class -->
-            <button
-              class="btn-ratio px-4 py-3 text-sm border border-border/50 rounded-xl bg-bg/50 text-text-secondary hover:bg-accent/10 hover:text-accent transition-all [&.active]:bg-accent [&.active]:text-bg [&.active]:border-accent [&.active]:font-bold"
-              data-ratio="original">Original</button>
-            <button
-              class="btn-ratio active px-4 py-3 text-sm border border-border/50 rounded-xl bg-bg/50 text-text-secondary hover:bg-accent/10 hover:text-accent transition-all [&.active]:bg-accent [&.active]:text-bg [&.active]:border-accent [&.active]:font-bold"
-              data-ratio="16:9">16:9</button>
-            <button
-              class="btn-ratio px-4 py-3 text-sm border border-border/50 rounded-xl bg-bg/50 text-text-secondary hover:bg-accent/10 hover:text-accent transition-all [&.active]:bg-accent [&.active]:text-bg [&.active]:border-accent [&.active]:font-bold"
-              data-ratio="4:3">4:3</button>
-            <button
-              class="btn-ratio px-4 py-3 text-sm border border-border/50 rounded-xl bg-bg/50 text-text-secondary hover:bg-accent/10 hover:text-accent transition-all [&.active]:bg-accent [&.active]:text-bg [&.active]:border-accent [&.active]:font-bold"
-              data-ratio="1:1">1:1</button>
+        <div id="info-panel" class="hidden mb-8 p-4 bg-bg rounded-xl text-sm">
+          <div class="flex justify-between mb-2">
+            <span>Original:</span>
+            <span id="info-original-size" class="font-semibold"></span>
           </div>
-
-          <div id="info-panel" class="hidden mb-8 p-4 bg-bg rounded-xl text-sm">
-            <div class="flex justify-between mb-2">
-              <span>Original:</span>
-              <span id="info-original-size" class="font-semibold"></span>
-            </div>
-            <div class="flex justify-between">
-              <span>Result:</span>
-              <span id="info-result-size" class="font-semibold text-accent"></span>
-            </div>
+          <div class="flex justify-between">
+            <span>Result:</span>
+            <span id="info-result-size" class="font-semibold text-accent"></span>
           </div>
-
-          <button id="btn-download"
-            class="w-full inline-flex items-center justify-center px-6 py-4 rounded-xl font-bold transition-all duration-300 gap-2 bg-accent text-white hover:bg-accent-hover shadow-lg shadow-accent/20 disabled:bg-accent/10 disabled:text-text-primary/30 disabled:border disabled:border-accent/20 disabled:cursor-not-allowed disabled:shadow-none"
-            disabled>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            이미지 다운로드
-          </button>
         </div>
+
+        <button id="btn-download"
+          class="w-full inline-flex items-center justify-center px-6 py-4 rounded-xl font-bold transition-all duration-300 gap-2 bg-accent text-white hover:bg-accent-hover shadow-lg shadow-accent/20 disabled:bg-accent/10 disabled:text-text-primary/30 disabled:border disabled:border-accent/20 disabled:cursor-not-allowed disabled:shadow-none"
+          disabled>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          이미지 다운로드
+        </button>
       </div>
     </div>
-  </main>
-
-  <app-footer></app-footer>
+  </app-layout>
 
   <script type="module" src="src/pages/cropper.js"></script>
 </body>

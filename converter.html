@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>zen-image | Image Converter</title>
+  <meta name="description" content="이미지를 PNG, JPG, WEBP 등 원하는 포맷으로 자유롭게 변환하세요.">
+
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://webfontworld.github.io/score/SCoreDream.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="src/assets/app-icon.png">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="src/styles/main.css">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="src/config/tailwind.config.js"></script>
+
+  <!-- Web Components -->
+  <script type="module" src="src/components/AppHeader.js"></script>
+  <script type="module" src="src/components/AppFooter.js"></script>
+  <script type="module" src="src/components/AppLayout.js"></script>
+</head>
+
+<body class="bg-bg text-text-primary antialiased font-sans flex flex-col min-h-screen">
+  <app-layout page-title="Image Converter">
+    <!-- Main Content Container -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Left: Upload & Preview -->
+      <div
+        class="card bg-surface/40 backdrop-blur-sm rounded-[24px] p-8 shadow-md transition-all duration-300 border border-border/50 min-h-[400px] flex flex-col items-center justify-center cursor-pointer relative group overflow-hidden"
+        id="drop-zone">
+        <div
+          class="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+        </div>
+
+        <div id="upload-prompt" class="text-center transition-all group-hover:scale-105 relative z-10">
+          <div
+            class="w-16 h-16 bg-surface rounded-2xl flex items-center justify-center mx-auto mb-6 text-accent shadow-lg border border-border/50 group-hover:bg-accent group-hover:text-bg transition-all duration-500">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <p class="font-bold text-xl mb-2 text-text-primary">이미지 선택 또는 드래그 앤 드롭</p>
+          <p class="text-text-secondary">PNG, JPG, WEBP 등으로 변환을 지원합니다.</p>
+        </div>
+        <input type="file" id="file-input" hidden accept="image/*">
+      </div>
+
+      <!-- Right: Options & Controls -->
+      <div class="flex flex-col gap-6">
+        <div class="card bg-surface/40 backdrop-blur-sm rounded-[24px] p-8 border border-border/50 flex flex-col gap-8">
+          <h3 class="text-xl font-bold flex items-center gap-2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20v-6M9 17l3 3 3-3"></path>
+              <path d="M4 4h16v12H4z"></path>
+            </svg>
+            Conversion Options
+          </h3>
+
+          <!-- Format Selection -->
+          <div class="space-y-4">
+            <label class="text-sm font-bold text-text-secondary uppercase tracking-wider">대상 포맷 선택</label>
+            <div class="grid grid-cols-3 gap-3">
+              <button type="button" data-format="image/png"
+                class="btn-format active py-3 rounded-xl border border-border bg-surface hover:border-accent transition-all text-sm font-bold">PNG</button>
+              <button type="button" data-format="image/jpeg"
+                class="btn-format py-3 rounded-xl border border-border bg-surface hover:border-accent transition-all text-sm font-bold">JPG</button>
+              <button type="button" data-format="image/webp"
+                class="btn-format py-3 rounded-xl border border-border bg-surface hover:border-accent transition-all text-sm font-bold">WEBP</button>
+            </div>
+          </div>
+
+          <!-- Quality Control -->
+          <div id="quality-control" class="space-y-4 hidden animate-fade-in">
+            <div class="flex justify-between items-center">
+              <label class="text-sm font-bold text-text-secondary uppercase tracking-wider">원본 품질 유지</label>
+              <span id="quality-val" class="text-accent font-mono font-bold">0.9</span>
+            </div>
+            <input type="range" id="input-quality" min="0.1" max="1.0" step="0.1" value="0.9"
+              class="w-full h-1.5 bg-bg/50 rounded-lg appearance-none cursor-pointer accent-accent">
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col gap-3 mt-4">
+            <button id="btn-convert"
+              class="btn-primary w-full py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+              포맷 변환 실행
+            </button>
+            <button id="btn-download"
+              class="w-full py-4 rounded-xl font-bold bg-surface border border-border text-text-primary hover:bg-bg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled>
+              파일 다운로드
+            </button>
+          </div>
+        </div>
+
+        <!-- Info Log (Optional/Custom) -->
+        <div id="info-log" class="hidden animate-fade-in p-6 bg-accent/5 rounded-2xl border border-accent/20">
+          <p class="text-sm text-text-secondary flex items-center gap-2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span id="res-info-msg"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preview Area -->
+    <div id="preview-area" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 mt-8">
+      <!-- Original -->
+      <div class="space-y-4">
+        <div class="flex justify-between items-center px-2">
+          <h4 class="font-semibold text-text-secondary">원래 이미지 <span id="orig-info"
+              class="text-xs font-normal opacity-60"></span></h4>
+        </div>
+        <div
+          class="aspect-square bg-slate-900/50 rounded-2xl border border-border/30 overflow-hidden flex items-center justify-center">
+          <img id="orig-preview" class="max-w-full max-h-full object-contain shadow-2xl">
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="space-y-4">
+        <div class="flex justify-between items-center px-2">
+          <h4 class="font-semibold text-text-secondary">변환 결과 <span id="res-info"
+              class="text-xs font-normal opacity-60"></span></h4>
+        </div>
+        <div
+          class="aspect-square bg-slate-900/50 rounded-2xl border border-border/30 overflow-hidden flex items-center justify-center">
+          <img id="res-preview" class="max-w-full max-h-full object-contain shadow-2xl">
+        </div>
+      </div>
+    </div>
+  </app-layout>
+
+  <script type="module" src="src/pages/converter.js"></script>
+</body>
+
+</html>

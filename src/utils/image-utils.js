@@ -47,13 +47,12 @@ export const cropImage = (image, cropX, cropY, cropWidth, cropHeight) => {
 };
 
 /**
- * 이미지 배경을 자동으로 감지하여 객체 영역만 잘라냄 (옵션으로 배경 투명화 지원)
+ * 이미지 배경을 자동으로 감지하여 객체 영역만 잘라냄
  * @param {HTMLImageElement|HTMLCanvasElement} source 
  * @param {number} tolerance 배경 감지 오차 범위 (0~255)
- * @param {boolean} removeBackground 배경색을 투명하게 제거할지 여부
  * @returns {Object} { canvas: HTMLCanvasElement, info: { minX, minY, maxX, maxY, width, height } }
  */
-export function trimImage(source, tolerance = 30, removeBackground = false) {
+export function trimImage(source, tolerance = 30) {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
@@ -119,32 +118,12 @@ export function trimImage(source, tolerance = 30, removeBackground = false) {
   resultCanvas.height = trimHeight;
   const resultCtx = resultCanvas.getContext('2d');
 
-  // 잘라낸 영역 데이터 추출
-  const trimmedData = ctx.getImageData(minX, minY, trimWidth, trimHeight);
-  const tPixels = trimmedData.data;
-
-  // 배경 투명화 처리
-  if (removeBackground) {
-    for (let i = 0; i < tPixels.length; i += 4) {
-      const r = tPixels[i];
-      const g = tPixels[i + 1];
-      const b = tPixels[i + 2];
-      const a = tPixels[i + 3];
-
-      const diff = Math.sqrt(
-        Math.pow(r - bgR, 2) +
-        Math.pow(g - bgG, 2) +
-        Math.pow(b - bgB, 2) +
-        Math.pow(a - bgA, 2)
-      );
-
-      if (diff <= tolerance) {
-        tPixels[i + 3] = 0;
-      }
-    }
-  }
-
-  resultCtx.putImageData(trimmedData, 0, 0);
+  // 잘라낸 영역 그리기 (효율적인 drawImage 사용)
+  resultCtx.drawImage(
+    canvas,
+    minX, minY, trimWidth, trimHeight,
+    0, 0, trimWidth, trimHeight
+  );
 
   return {
     canvas: resultCanvas,
