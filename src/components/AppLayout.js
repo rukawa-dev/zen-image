@@ -6,54 +6,11 @@ class AppLayout extends HTMLElement {
 
   constructor() {
     super();
-    this.injectHeadResources();
   }
 
   injectHeadResources() {
-    if (AppLayout.resourcesInjected) return;
-
-    const head = document.head;
-
-    // 1. Fonts
-    if (!head.querySelector('link[href*="SCoreDream.css"]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'https://webfontworld.github.io/score/SCoreDream.css';
-      head.appendChild(link);
-    }
-
-    // 2. Favicon
-    if (!head.querySelector('link[rel="icon"]')) {
-      const link = document.createElement('link');
-      link.rel = 'icon';
-      link.type = 'image/png';
-      link.href = 'src/assets/app-icon.png';
-      head.appendChild(link);
-    }
-
-    // 3. Main CSS
-    if (!head.querySelector('link[href*="main.css"]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'src/styles/main.css';
-      head.appendChild(link);
-    }
-
-    // 4. Tailwind CSS (CDN)
-    if (!window.tailwind && !head.querySelector('script[src*="tailwindcss.com"]')) {
-      const script = document.createElement('script');
-      script.src = 'https://cdn.tailwindcss.com';
-      head.appendChild(script);
-    }
-
-    // 5. Tailwind Config
-    if (!head.querySelector('script[src*="tailwind.config.js"]')) {
-      const script = document.createElement('script');
-      script.src = 'src/config/tailwind.config.js';
-      head.appendChild(script);
-    }
-
-    AppLayout.resourcesInjected = true;
+    // 리소스는 이제 각 HTML 파일의 <head>에서 정적으로 관리됩니다.
+    // 이는 로딩 순서 보장 및 FOUC 방지를 위함입니다.
   }
 
   connectedCallback() {

@@ -7,7 +7,22 @@
   <title>zen-image | Auto Image Trimmer</title>
   <meta name="description" content="이미지 주변 여백을 제거하여 중심 객체 경계까지만 이미지를 자동으로 축소합니다.">
 
-  <!-- App Layout (Handles all common resources: Fonts, Favicon, CSS, Tailwind) -->
+  <!-- 1. Fonts & CSS -->
+  <link rel="stylesheet" href="https://webfontworld.github.io/score/SCoreDream.css">
+  <link rel="stylesheet" href="src/styles/main.css">
+  <link rel="icon" type="image/png" href="src/assets/app-icon.png">
+
+  <style>
+    app-layout:not(:defined) {
+      display: none;
+    }
+  </style>
+
+  <!-- 2. Tailwind (Local library for stability) -->
+  <script src="src/libs/tailwindcss_3.4.5.js"></script>
+  <script src="src/config/tailwind.config.js"></script>
+
+  <!-- 3. Components -->
   <script type="module" src="src/components/AppLayout.js"></script>
 </head>
 
