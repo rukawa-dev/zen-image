@@ -1,31 +1,42 @@
-import { ICON_SPECS } from '../utils/icon-specs.js';
-import { resizeImage } from '../utils/image-utils.js';
+import { trimImage } from '../utils/image-utils.js';
 
 let originalImage = null;
-let isProcessing = false;
+let trimmedCanvas = null;
 
 const init = () => {
   const dropZone = document.getElementById('drop-zone');
   const fileInput = document.getElementById('file-input');
-  const exportBtn = document.getElementById('btn-export');
+  const trimBtn = document.getElementById('btn-trim');
+  const downloadBtn = document.getElementById('btn-download');
+  const toleranceInput = document.getElementById('input-tolerance');
 
   if (!dropZone) return;
 
   dropZone.onclick = () => fileInput.click();
   fileInput.onchange = (e) => handleFile(e.target.files[0]);
-  exportBtn.onclick = () => exportIcons();
+
+  // 버튼 클릭 시 트리밍 실행
+  trimBtn.onclick = () => updateTrim();
+  downloadBtn.onclick = () => downloadImage();
+
+  // 트리밍 파라미터 변경 시 실시간 반영 (선택 사항이나 실시간이 더 좋으므로 유지)
+  toleranceInput.oninput = (e) => {
+    document.getElementById('tolerance-val').innerText = e.target.value;
+    updateTrim();
+  };
 
   dropZone.ondragover = (e) => {
     e.preventDefault();
-    dropZone.style.borderColor = 'var(--accent-color)';
+    dropZone.classList.add('border-accent');
   };
 
   dropZone.ondragleave = () => {
-    dropZone.style.borderColor = 'var(--border-color)';
+    dropZone.classList.remove('border-accent');
   };
 
   dropZone.ondrop = (e) => {
     e.preventDefault();
+    dropZone.classList.remove('border-accent');
     handleFile(e.dataTransfer.files[0]);
   };
 };
@@ -38,76 +49,60 @@ const handleFile = (file) => {
     const img = new Image();
     img.onload = () => {
       originalImage = img;
-      showPreview(img);
+      updateTrim();
     };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 };
 
-const showPreview = (img) => {
-  document.getElementById('upload-prompt').style.display = 'none';
-  document.getElementById('preview-container').style.display = 'flex';
-  document.getElementById('preview-img').src = img.src;
-  document.getElementById('btn-export').disabled = false;
-  document.getElementById('status-panel').style.display = 'block';
+const updateTrim = () => {
+  if (!originalImage) return;
+
+  const tolerance = parseInt(document.getElementById('input-tolerance').value);
+
+  // 배경 감지 및 트리밍 실행 (정보와 함께 반환)
+  const result = trimImage(originalImage, tolerance);
+  trimmedCanvas = result.canvas;
+
+  showPreview(originalImage, result);
 };
 
-const exportIcons = async () => {
-  if (isProcessing || !originalImage) return;
+const showPreview = (origImg, result) => {
+  const origPreview = document.getElementById('orig-preview');
+  const resPreview = document.getElementById('res-preview');
+  const uploadPrompt = document.getElementById('upload-prompt');
+  const previewArea = document.getElementById('preview-area');
+  const downloadBtn = document.getElementById('btn-download');
+  const infoLog = document.getElementById('info-log');
 
-  isProcessing = true;
-  const exportBtn = document.getElementById('btn-export');
-  const statusText = document.getElementById('status-text');
+  const { canvas, info } = result;
 
-  exportBtn.disabled = true;
-  statusText.innerText = '아이콘 생성 중...';
+  // UI 상태 전환
+  uploadPrompt.classList.add('opacity-40');
+  previewArea.classList.remove('hidden');
+  infoLog.classList.remove('hidden');
+  downloadBtn.disabled = false;
 
-  const zip = new JSZip();
-  const exportIos = document.getElementById('check-ios').checked;
-  const exportAndroid = document.getElementById('check-android').checked;
+  // 원본 프리뷰 & 정보
+  origPreview.src = origImg.src;
+  document.getElementById('orig-res').innerText = `(${origImg.naturalWidth} × ${origImg.naturalHeight} px)`;
 
-  try {
-    if (exportIos) {
-      const iosFolder = zip.folder("ios");
-      for (const spec of ICON_SPECS.ios) {
-        const canvas = resizeImage(originalImage, spec.size, spec.size);
-        const blob = await canvasToBlob(canvas);
-        iosFolder.file(spec.name, blob);
-      }
-    }
+  // 결과 프리뷰 & 정보
+  resPreview.src = canvas.toDataURL('image/png');
+  document.getElementById('res-res').innerText = `(${info.width} × ${info.height} px)`;
 
-    if (exportAndroid) {
-      const androidFolder = zip.folder("android");
-      for (const spec of ICON_SPECS.android) {
-        const canvas = resizeImage(originalImage, spec.size, spec.size);
-        const blob = await canvasToBlob(canvas);
-        androidFolder.file(spec.name, blob);
-      }
-    }
-
-    statusText.innerText = 'ZIP 파일 압축 중...';
-    const content = await zip.generateAsync({ type: "blob" });
-
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(content);
-    link.download = `zen-icons-${Date.now()}.zip`;
-    link.click();
-
-    statusText.innerText = '다운로드 완료!';
-  } catch (error) {
-    console.error(error);
-    statusText.innerText = '오류가 발생했습니다.';
-  } finally {
-    isProcessing = false;
-    exportBtn.disabled = false;
-  }
+  // 트리밍 정보 로그
+  document.getElementById('trim-coords').innerText = `(${info.minX}, ${info.minY}) ~ (${info.maxX}, ${info.maxY})`;
 };
 
-const canvasToBlob = (canvas) => {
-  return new Promise(resolve => {
-    canvas.toBlob(resolve, 'image/png');
-  });
+const downloadImage = () => {
+  if (!trimmedCanvas) return;
+
+  const link = document.createElement('a');
+  link.href = trimmedCanvas.toDataURL('image/png');
+  link.download = `zen-trim-${Date.now()}.png`;
+  link.click();
 };
 
 document.addEventListener('DOMContentLoaded', init);

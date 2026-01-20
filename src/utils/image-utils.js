@@ -45,3 +45,109 @@ export const cropImage = (image, cropX, cropY, cropWidth, cropHeight) => {
   ctx.drawImage(image, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
   return canvas;
 };
+
+/**
+ * 이미지 배경을 자동으로 감지하여 객체 영역만 잘라냄 (옵션으로 배경 투명화 지원)
+ * @param {HTMLImageElement|HTMLCanvasElement} source 
+ * @param {number} tolerance 배경 감지 오차 범위 (0~255)
+ * @param {boolean} removeBackground 배경색을 투명하게 제거할지 여부
+ * @returns {Object} { canvas: HTMLCanvasElement, info: { minX, minY, maxX, maxY, width, height } }
+ */
+export function trimImage(source, tolerance = 30, removeBackground = false) {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+  const srcWidth = source.width || source.naturalWidth;
+  const srcHeight = source.height || source.naturalHeight;
+
+  canvas.width = srcWidth;
+  canvas.height = srcHeight;
+  ctx.drawImage(source, 0, 0);
+
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+  const width = imageData.width;
+  const height = imageData.height;
+
+  // 좌상단(0,0) 픽셀을 배경색으로 감지
+  const bgR = data[0];
+  const bgG = data[1];
+  const bgB = data[2];
+  const bgA = data[3];
+
+  let minX = width, minY = height, maxX = 0, maxY = 0;
+  let found = false;
+
+  // 1차 스캔: 경계 탐색
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const idx = (y * width + x) * 4;
+      const r = data[idx];
+      const g = data[idx + 1];
+      const b = data[idx + 2];
+      const a = data[idx + 3];
+
+      const diff = Math.sqrt(
+        Math.pow(r - bgR, 2) +
+        Math.pow(g - bgG, 2) +
+        Math.pow(b - bgB, 2) +
+        Math.pow(a - bgA, 2)
+      );
+
+      if (diff > tolerance && a > 10) {
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x);
+        maxY = Math.max(maxY, y);
+        found = true;
+      }
+    }
+  }
+
+  if (!found) {
+    return {
+      canvas,
+      info: { minX: 0, minY: 0, maxX: width - 1, maxY: height - 1, width, height }
+    };
+  }
+
+  const trimWidth = (maxX - minX) + 1;
+  const trimHeight = (maxY - minY) + 1;
+
+  const resultCanvas = document.createElement('canvas');
+  resultCanvas.width = trimWidth;
+  resultCanvas.height = trimHeight;
+  const resultCtx = resultCanvas.getContext('2d');
+
+  // 잘라낸 영역 데이터 추출
+  const trimmedData = ctx.getImageData(minX, minY, trimWidth, trimHeight);
+  const tPixels = trimmedData.data;
+
+  // 배경 투명화 처리
+  if (removeBackground) {
+    for (let i = 0; i < tPixels.length; i += 4) {
+      const r = tPixels[i];
+      const g = tPixels[i + 1];
+      const b = tPixels[i + 2];
+      const a = tPixels[i + 3];
+
+      const diff = Math.sqrt(
+        Math.pow(r - bgR, 2) +
+        Math.pow(g - bgG, 2) +
+        Math.pow(b - bgB, 2) +
+        Math.pow(a - bgA, 2)
+      );
+
+      if (diff <= tolerance) {
+        tPixels[i + 3] = 0;
+      }
+    }
+  }
+
+  resultCtx.putImageData(trimmedData, 0, 0);
+
+  return {
+    canvas: resultCanvas,
+    info: { minX, minY, maxX, maxY, width: trimWidth, height: trimHeight }
+  };
+}

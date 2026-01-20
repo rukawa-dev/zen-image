@@ -303,3 +303,11 @@ header {
   object-fit: cover;
   display: block;
 }
+
+/* Utility for Transparency Preview */
+.bg-checkerboard {
+  background-image: url('../assets/transparent-bg.png');
+  background-size: 20px 20px;
+  background-repeat: repeat;
+  background-color: #ffffff;
+}
