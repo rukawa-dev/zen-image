@@ -4,9 +4,9 @@ tailwind.config = {
       colors: {
         bg: '#011627',
         surface: '#0b2942',
-        accent: '#7fdbca',
+        accent: '#049e8a',
         'accent-secondary': '#c792ea',
-        'accent-hover': '#95e6cb',
+        'accent-hover': '#05c4ab',
         'text-primary': '#d6deeb',
         'text-secondary': '#5f7e97',
         border: '#1d3b53',

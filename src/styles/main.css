@@ -67,9 +67,10 @@
   --card-bg: #0b2942;
   --text-primary: #d6deeb;
   --text-secondary: #5f7e97;
-  --accent-color: #7fdbca;
+  --accent-color: #049e8a;
+  /* 고대비 딥 테일 */
   --accent-secondary: #c792ea;
-  --accent-hover: #95e6cb;
+  --accent-hover: #05c4ab;
   --border-color: #1d3b53;
   --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.4);
@@ -167,7 +168,18 @@ header {
 
 .btn-primary {
   background: var(--accent-color);
-  color: #011627;
+  color: #ffffff;
+  /* 화이트 텍스트로 복구 */
+  font-weight: 700;
+  box-shadow: 0 4px 14px 0 rgba(0, 186, 154, 0.2);
+}
+
+.btn-primary:disabled {
+  background: rgba(0, 186, 154, 0.1);
+  color: rgba(214, 222, 235, 0.3);
+  border: 1px solid rgba(0, 186, 154, 0.2);
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 .btn-primary:hover {
@@ -216,8 +228,9 @@ header {
 /* Crop UI */
 .btn-ratio.active {
   background: var(--accent-color) !important;
-  color: white !important;
+  color: #ffffff !important;
   border-color: var(--accent-color) !important;
+  font-weight: 700;
 }
 
 #preview-container {
