@@ -7,19 +7,17 @@
   <title>zen-image | Image Cropper</title>
 
   <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://webfontworld.github.io/score/SCoreDream.css">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="src/assets/app-icon.png">
 
   <!-- CSS -->
-  <!-- <link rel="stylesheet" href="src/styles/main.css"> -->
+  <link rel="stylesheet" href="src/styles/main.css">
 
   <!-- Tailwind CSS -->
-  <script src="src/config/tailwind.config.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="src/config/tailwind.config.js"></script>
 
   <!-- Web Components -->
   <script type="module" src="src/components/AppHeader.js"></script>
@@ -44,9 +42,13 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Left: Upload & Preview -->
         <div
-          class="card bg-white rounded-[20px] p-8 shadow-sm transition-all duration-300 border border-border min-h-[400px] flex flex-col items-center justify-center cursor-pointer relative"
+          class="card bg-surface/40 backdrop-blur-sm rounded-[24px] p-8 shadow-md transition-all duration-300 border border-border/50 min-h-[400px] flex flex-col items-center justify-center cursor-pointer relative group overflow-hidden"
           id="drop-zone">
-          <div id="preview-container" class="w-full h-auto hidden relative overflow-hidden shadow-md select-none">
+          <div
+            class="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+          </div>
+          <div id="preview-container"
+            class="w-full h-auto hidden relative overflow-hidden shadow-lg select-none z-10 rounded-lg">
             <img id="preview-img" class="w-full h-full object-cover block">
           </div>
 
@@ -65,22 +67,23 @@
         </div>
 
         <!-- Right: Options -->
-        <div class="bg-white rounded-[20px] p-8 shadow-sm transition-all duration-300 border border-border h-fit">
+        <div
+          class="bg-surface/40 backdrop-blur-sm rounded-[24px] p-8 shadow-md transition-all duration-300 border border-border/50 h-fit">
           <h3 class="text-xl font-semibold mb-6">Crop Options</h3>
 
           <div class="grid grid-cols-3 gap-2 mb-6">
             <!-- Ratio Buttons with arbitrary variants for .active class -->
             <button
-              class="btn-ratio px-4 py-3 text-sm border border-border rounded-lg bg-white hover:bg-gray-50 transition-colors [&.active]:bg-accent [&.active]:text-white [&.active]:border-accent"
+              class="btn-ratio px-4 py-3 text-sm border border-border/50 rounded-xl bg-bg/50 text-text-secondary hover:bg-accent/10 hover:text-accent transition-all [&.active]:bg-accent [&.active]:text-bg [&.active]:border-accent [&.active]:font-bold"
               data-ratio="original">Original</button>
             <button
-              class="btn-ratio active px-4 py-3 text-sm border border-border rounded-lg bg-white hover:bg-gray-50 transition-colors [&.active]:bg-accent [&.active]:text-white [&.active]:border-accent"
+              class="btn-ratio active px-4 py-3 text-sm border border-border/50 rounded-xl bg-bg/50 text-text-secondary hover:bg-accent/10 hover:text-accent transition-all [&.active]:bg-accent [&.active]:text-bg [&.active]:border-accent [&.active]:font-bold"
               data-ratio="16:9">16:9</button>
             <button
-              class="btn-ratio px-4 py-3 text-sm border border-border rounded-lg bg-white hover:bg-gray-50 transition-colors [&.active]:bg-accent [&.active]:text-white [&.active]:border-accent"
+              class="btn-ratio px-4 py-3 text-sm border border-border/50 rounded-xl bg-bg/50 text-text-secondary hover:bg-accent/10 hover:text-accent transition-all [&.active]:bg-accent [&.active]:text-bg [&.active]:border-accent [&.active]:font-bold"
               data-ratio="4:3">4:3</button>
             <button
-              class="btn-ratio px-4 py-3 text-sm border border-border rounded-lg bg-white hover:bg-gray-50 transition-colors [&.active]:bg-accent [&.active]:text-white [&.active]:border-accent"
+              class="btn-ratio px-4 py-3 text-sm border border-border/50 rounded-xl bg-bg/50 text-text-secondary hover:bg-accent/10 hover:text-accent transition-all [&.active]:bg-accent [&.active]:text-bg [&.active]:border-accent [&.active]:font-bold"
               data-ratio="1:1">1:1</button>
           </div>
 

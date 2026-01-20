@@ -2,15 +2,17 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        bg: '#f8f9fa',
-        accent: '#2c3e50',
-        'accent-hover': '#34495e',
-        'text-primary': '#1a1a1a',
-        'text-secondary': '#666666',
-        border: '#e9ecef',
+        bg: '#011627',
+        surface: '#0b2942',
+        accent: '#7fdbca',
+        'accent-secondary': '#c792ea',
+        'accent-hover': '#95e6cb',
+        'text-primary': '#d6deeb',
+        'text-secondary': '#5f7e97',
+        border: '#1d3b53',
       },
       fontFamily: {
-        sans: ['Outfit', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['Escoredream', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
       maxWidth: {
         'custom': '1200px',
