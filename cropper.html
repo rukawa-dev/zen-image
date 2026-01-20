@@ -43,9 +43,8 @@
         <!-- Left: Upload & Preview -->
         <div class="card" id="drop-zone"
           style="min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed var(--border-color); cursor: pointer;">
-          <div id="preview-container"
-            style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">
-            <img id="preview-img" style="width: 100%; height: 100%; object-fit: contain;">
+          <div id="preview-container" class="crop-preview-container">
+            <img id="preview-img" class="crop-preview-img">
           </div>
           <div id="upload-prompt" style="text-align: center;">
             <div style="font-size: 3rem; margin-bottom: 1rem;">✂️</div>
@@ -74,8 +73,6 @@
               style="padding: 0.5rem; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: 6px; background: white;">4:3</button>
             <button class="btn btn-ratio" data-ratio="1:1"
               style="padding: 0.5rem; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: 6px; background: white;">1:1</button>
-            <button class="btn btn-ratio" data-ratio="free"
-              style="padding: 0.5rem; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: 6px; background: white;">Free</button>
           </div>
 
           <div id="info-panel"

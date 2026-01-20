@@ -208,3 +208,21 @@ header {
   cursor: se-resize;
   transform: translate(50%, 50%);
 }
+
+/* Crop Preview - New Wrapper Styles */
+.crop-preview-container {
+  width: 100%;
+  height: auto;
+  display: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  user-select: none;
+}
+
+.crop-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
