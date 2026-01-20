@@ -82,12 +82,20 @@ document.addEventListener('DOMContentLoaded', () => {
         originalImage = img;
         origPreview.src = e.target.result;
         origInfo.textContent = `(${img.width}x${img.height}, ${formatBytes(file.size)})`;
+
+        // 포맷 뱃지 업데이트
+        const origFormatBadge = document.getElementById('orig-format');
+        const ext = file.type.split('/')[1].replace('jpeg', 'jpg').toUpperCase();
+        origFormatBadge.textContent = ext;
+        origFormatBadge.classList.remove('hidden');
+
         document.getElementById('upload-prompt').classList.add('opacity-40');
         previewArea.classList.remove('hidden');
         btnConvert.disabled = false;
         btnDownload.disabled = true;
         resPreview.src = '';
         resInfo.textContent = '';
+        document.getElementById('res-format').classList.add('hidden');
         infoLog.classList.add('hidden');
       };
       img.src = e.target.result;
@@ -120,8 +128,14 @@ document.addEventListener('DOMContentLoaded', () => {
       resPreview.src = url;
       resInfo.textContent = `(${canvas.width}x${canvas.height}, ${formatBytes(blob.size)})`;
 
-      const ext = selectedFormat.split('/')[1].toUpperCase();
-      resInfoMsg.textContent = `${ext} 포맷으로 변환이 완료되었습니다. (${formatBytes(blob.size)})`;
+      // 결과 포맷 뱃지 업데이트
+      const resFormatBadge = document.getElementById('res-format');
+      const resExt = selectedFormat.split('/')[1].replace('jpeg', 'jpg').toUpperCase();
+      resFormatBadge.textContent = resExt;
+      resFormatBadge.classList.remove('hidden');
+
+      const extDisplay = selectedFormat.split('/')[1].toUpperCase();
+      resInfoMsg.textContent = `${extDisplay} 포맷으로 변환이 완료되었습니다. (${formatBytes(blob.size)})`;
       infoLog.classList.remove('hidden');
 
       btnDownload.disabled = false;

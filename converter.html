@@ -91,13 +91,19 @@
 
           <!-- Action Buttons -->
           <div class="flex flex-col gap-3 mt-4">
-            <button id="btn-convert"
-              class="btn-primary w-full py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            <button id="btn-convert" class="btn btn-primary" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M12 20v-6M9 17l3 3 3-3"></path>
+                <path d="M4 4h16v12H4z"></path>
+              </svg>
               포맷 변환 실행
             </button>
-            <button id="btn-download"
-              class="w-full py-4 rounded-xl font-bold bg-surface border border-border text-text-primary hover:bg-bg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled>
+            <button id="btn-download" class="btn btn-secondary" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
               파일 다운로드
             </button>
           </div>
@@ -122,8 +128,12 @@
       <!-- Original -->
       <div class="space-y-4">
         <div class="flex justify-between items-center px-2">
-          <h4 class="font-semibold text-text-secondary">원래 이미지 <span id="orig-info"
-              class="text-xs font-normal opacity-60"></span></h4>
+          <div class="flex items-center gap-2">
+            <h4 class="font-semibold text-text-secondary">원래 이미지</h4>
+            <span id="orig-format"
+              class="px-2 py-0.5 bg-accent/10 text-accent text-[10px] font-black uppercase rounded border border-accent/20 tracking-wider hidden"></span>
+          </div>
+          <span id="orig-info" class="text-xs font-normal opacity-60"></span>
         </div>
         <div
           class="aspect-square bg-slate-900/50 rounded-2xl border border-border/30 overflow-hidden flex items-center justify-center">
@@ -134,8 +144,12 @@
       <!-- Result -->
       <div class="space-y-4">
         <div class="flex justify-between items-center px-2">
-          <h4 class="font-semibold text-text-secondary">변환 결과 <span id="res-info"
-              class="text-xs font-normal opacity-60"></span></h4>
+          <div class="flex items-center gap-2">
+            <h4 class="font-semibold text-text-secondary">변환 결과</h4>
+            <span id="res-format"
+              class="px-2 py-0.5 bg-indigo-500/10 text-indigo-400 text-[10px] font-black uppercase rounded border border-indigo-500/20 tracking-wider hidden"></span>
+          </div>
+          <span id="res-info" class="text-xs font-normal opacity-60"></span>
         </div>
         <div
           class="aspect-square bg-slate-900/50 rounded-2xl border border-border/30 overflow-hidden flex items-center justify-center">

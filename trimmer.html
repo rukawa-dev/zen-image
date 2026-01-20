@@ -59,15 +59,21 @@
 
       <!-- Action Bar & Controls -->
       <div class="flex flex-wrap items-center gap-y-6 gap-x-10">
-        <div class="flex items-center gap-3">
-          <button id="btn-trim"
-            class="px-6 py-2.5 rounded-lg font-bold bg-[#2563eb] text-white hover:bg-[#1d4ed8] transition-all shadow-md shrink-0">
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <button id="btn-trim" class="btn btn-primary !w-auto !px-8">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M7 2h10"></path>
+              <path d="M7 22h10"></path>
+              <rect x="6" y="6" width="12" height="12"></rect>
+            </svg>
             자동 Trim 실행
           </button>
-          <button id="btn-download"
-            class="px-6 py-2.5 rounded-lg font-bold bg-[#e2e8f0] text-[#475569] hover:bg-[#cbd5e1] transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
-            disabled>
-            결과 이미지 다운로드
+          <button id="btn-download" class="btn btn-secondary !w-auto !px-8" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            다운로드
           </button>
         </div>
 

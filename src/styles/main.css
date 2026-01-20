@@ -62,7 +62,7 @@
 }
 
 :root {
-  /* Color Palette - Night Owl */
+  /* Color Palette */
   --bg-color: #011627;
   --card-bg: #0b2942;
   --text-primary: #d6deeb;
@@ -152,38 +152,70 @@ header {
 
 
 
+/* Standardized Button System */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  font-weight: 500;
+  padding: 0.875rem 1.5rem;
+  border-radius: 14px;
+  font-weight: 700;
   cursor: pointer;
-  transition: var(--transition);
-  border: none;
-  font-size: 0.95rem;
-  gap: 0.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  font-size: 1rem;
+  gap: 0.625rem;
+  width: 100%;
+  /* Default to full width for tool actions */
+  user-select: none;
 }
 
 .btn-primary {
   background: var(--accent-color);
   color: #ffffff;
-  /* 화이트 텍스트로 복구 */
-  font-weight: 700;
-  box-shadow: 0 4px 14px 0 rgba(0, 186, 154, 0.2);
+  box-shadow: 0 4px 14px 0 rgba(4, 158, 138, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(4, 158, 138, 0.4);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .btn-primary:disabled {
-  background: rgba(0, 186, 154, 0.1);
+  background: rgba(4, 158, 138, 0.15);
   color: rgba(214, 222, 235, 0.3);
-  border: 1px solid rgba(0, 186, 154, 0.2);
+  border-color: rgba(4, 158, 138, 0.2);
   cursor: not-allowed;
   box-shadow: none;
 }
 
-.btn-primary:hover {
-  background: var(--accent-hover);
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--bg-color);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  transform: translateY(-2px);
+}
+
+.btn-secondary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 /* Animations */

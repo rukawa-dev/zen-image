@@ -34,7 +34,7 @@ class AppLayout extends HTMLElement {
           <!-- Page Header -->
           <div class="flex items-center gap-4 mb-8">
             ${showBack ? `
-              <a href="/"
+              <a href="index.html"
                 class="group flex items-center justify-center w-10 h-10 rounded-full bg-surface/40 backdrop-blur-md border border-border/50 text-accent hover:bg-accent hover:text-bg transition-all duration-300">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                   class="group-hover:-translate-x-0.5 transition-transform">
