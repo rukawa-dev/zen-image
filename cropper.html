@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>zen-image | Image Cropper</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="src/assets/app-icon.png">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="src/styles/main.css">
+</head>
+
+<body>
+  <header>
+    <div class="container nav-container">
+      <a href="/" class="logo" id="logo">
+        <img src="src/assets/app-icon.png" alt="zen-image logo" style="width: 32px; height: 32px; border-radius: 8px;">
+        zen-image
+      </a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="fade-in" style="padding: 2rem 0;">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+        <a href="/" class="btn" style="padding: 0.5rem; border-radius: 50%; background: #eee;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </a>
+        <h2 style="font-size: 2rem;">Image Cropper</h2>
+      </div>
+
+      <div class="grid grid-2">
+        <!-- Left: Upload & Preview -->
+        <div class="card" id="drop-zone"
+          style="min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed var(--border-color); cursor: pointer;">
+          <div id="preview-container"
+            style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">
+            <img id="preview-img" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+          <div id="upload-prompt" style="text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">✂️</div>
+            <p style="font-weight: 600;">이미지를 드래그하거나 클릭하여 업로드</p>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">PNG, JPG, WebP 지원</p>
+          </div>
+          <input type="file" id="file-input" hidden accept="image/*">
+          <button id="btn-reset" class="btn"
+            style="display: none; margin-top: 1rem; background: #eee; color: var(--text-secondary); padding: 0.5rem 1rem; font-size: 0.9rem;">
+            이미지 초기화
+          </button>
+        </div>
+
+        <!-- Right: Options -->
+        <div class="card">
+
+
+          <h3 style="margin-bottom: 1.5rem;">Crop Options</h3>
+
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1.5rem;">
+            <button class="btn btn-ratio" data-ratio="original"
+              style="padding: 0.5rem; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: 6px; background: white;">Original</button>
+            <button class="btn btn-ratio active" data-ratio="16:9"
+              style="padding: 0.5rem; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: 6px; background: white;">16:9</button>
+            <button class="btn btn-ratio" data-ratio="4:3"
+              style="padding: 0.5rem; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: 6px; background: white;">4:3</button>
+            <button class="btn btn-ratio" data-ratio="1:1"
+              style="padding: 0.5rem; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: 6px; background: white;">1:1</button>
+            <button class="btn btn-ratio" data-ratio="free"
+              style="padding: 0.5rem; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: 6px; background: white;">Free</button>
+          </div>
+
+          <div id="info-panel"
+            style="display: none; margin-bottom: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 12px; font-size: 0.9rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <span>Original:</span>
+              <span id="info-original-size" style="font-weight: 600;"></span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Result:</span>
+              <span id="info-result-size" style="font-weight: 600; color: var(--accent-color);"></span>
+            </div>
+          </div>
+
+          <button id="btn-download" class="btn btn-primary" style="width: 100%;" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            이미지 다운로드
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer
+    style="margin-top: 4rem; padding: 2rem 0; border-top: 1px solid var(--border-color); text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+    <p>Copyright &copy; <a href="https://rukawa-dev.github.io/land-gate/" target="_blank"
+        style="color: inherit; text-decoration: none; font-weight: 600;">SOFT-LAND</a>. All rights reserved.</p>
+  </footer>
+
+  <script type="module" src="src/pages/cropper.js"></script>
+</body>
+
+</html>
