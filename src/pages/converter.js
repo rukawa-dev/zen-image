@@ -3,7 +3,7 @@ import { formatBytes } from '../utils/image-utils.js';
 document.addEventListener('DOMContentLoaded', () => {
   const dropZone = document.getElementById('drop-zone');
   const fileInput = document.getElementById('file-input');
-  const selectFormat = document.getElementById('select-format');
+  const formatButtons = document.querySelectorAll('.btn-format');
   const qualityControl = document.getElementById('quality-control');
   const inputQuality = document.getElementById('input-quality');
   const qualityVal = document.getElementById('quality-val');
@@ -14,22 +14,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const resPreview = document.getElementById('res-preview');
   const origInfo = document.getElementById('orig-info');
   const resInfo = document.getElementById('res-info');
+  const resInfoMsg = document.getElementById('res-info-msg');
+  const infoLog = document.getElementById('info-log');
 
   let originalImage = null;
-  let convertedBlob = null;
   let originalFile = null;
+  let selectedFormat = 'image/png';
+  let convertedBlob = null;
+
+  // 포맷 선택 처리
+  formatButtons.forEach(btn => {
+    btn.onclick = () => {
+      formatButtons.forEach(b => {
+        b.classList.remove('active', 'border-accent', 'text-accent');
+        b.classList.add('border-border', 'bg-surface');
+      });
+      btn.classList.add('active', 'border-accent', 'text-accent');
+      btn.classList.remove('border-border', 'bg-surface');
+      selectedFormat = btn.dataset.format;
+      updateQualityUI();
+    };
+  });
 
   // 품질 조절 UI 토글 (JPG, WEBP일 때만 노출)
   const updateQualityUI = () => {
-    const format = selectFormat.value;
-    if (format === 'image/jpeg' || format === 'image/webp') {
+    if (selectedFormat === 'image/jpeg' || selectedFormat === 'image/webp') {
       qualityControl.classList.remove('hidden');
     } else {
       qualityControl.classList.add('hidden');
     }
   };
 
-  selectFormat.onchange = updateQualityUI;
   inputQuality.oninput = () => {
     qualityVal.textContent = inputQuality.value;
   };
@@ -67,11 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
         originalImage = img;
         origPreview.src = e.target.result;
         origInfo.textContent = `(${img.width}x${img.height}, ${formatBytes(file.size)})`;
+        document.getElementById('upload-prompt').classList.add('opacity-40');
         previewArea.classList.remove('hidden');
         btnConvert.disabled = false;
         btnDownload.disabled = true;
         resPreview.src = '';
         resInfo.textContent = '';
+        infoLog.classList.add('hidden');
       };
       img.src = e.target.result;
     };
@@ -83,13 +100,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!originalImage) return;
 
     const canvas = document.createElement('canvas');
-    canvas.width = originalImage.width;
-    canvas.height = originalImage.height;
+    canvas.width = originalImage.naturalWidth;
+    canvas.height = originalImage.naturalHeight;
     const ctx = canvas.getContext('2d');
 
-    // 배경 채우기 (JPG 변환 시 투명 영역은 검은색 또는 흰색으로 채워짐 - 기본은 투명 유지 또는 채우기)
-    // JPG의 경우 투명도가 없으므로 흰색 배경을 먼저 깔아주면 결과가 깔끔함
-    if (selectFormat.value === 'image/jpeg') {
+    // JPG 전환 시 흰색 배경
+    if (selectedFormat === 'image/jpeg') {
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
@@ -97,22 +113,26 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.drawImage(originalImage, 0, 0);
 
     const quality = parseFloat(inputQuality.value);
-    const format = selectFormat.value;
 
     canvas.toBlob((blob) => {
       convertedBlob = blob;
       const url = URL.createObjectURL(blob);
       resPreview.src = url;
       resInfo.textContent = `(${canvas.width}x${canvas.height}, ${formatBytes(blob.size)})`;
+
+      const ext = selectedFormat.split('/')[1].toUpperCase();
+      resInfoMsg.textContent = `${ext} 포맷으로 변환이 완료되었습니다. (${formatBytes(blob.size)})`;
+      infoLog.classList.remove('hidden');
+
       btnDownload.disabled = false;
-    }, format, quality);
+    }, selectedFormat, quality);
   };
 
   // 결과 다운로드
   btnDownload.onclick = () => {
     if (!convertedBlob) return;
 
-    const ext = selectFormat.value.split('/')[1].replace('jpeg', 'jpg');
+    const ext = selectedFormat.split('/')[1].replace('jpeg', 'jpg');
     const originalName = originalFile.name.split('.')[0];
     const fileName = `${originalName}_converted.${ext}`;
 

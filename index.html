@@ -7,28 +7,13 @@
   <title>zen-image | Dashboard</title>
   <meta name="description" content="복잡함을 덜어낸 가장 깔끔한 이미지 리사이징 및 자동 트리밍 도구">
 
-  <!-- Fonts -->
-  <!-- Fonts 정의는 main.css에서 수행함 -->
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="src/assets/app-icon.png">
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="src/styles/main.css">
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="src/config/tailwind.config.js"></script>
-
-  <!-- Web Components -->
-  <script type="module" src="src/components/AppHeader.js"></script>
-  <script type="module" src="src/components/AppFooter.js"></script>
+  <!-- App Layout (Handles all common resources) -->
+  <script type="module" src="src/components/AppLayout.js"></script>
 </head>
 
-<body class="bg-bg text-text-primary antialiased font-sans flex flex-col min-h-screen">
-  <app-header></app-header>
 
-  <main class="max-w-custom mx-auto px-8 flex-1 w-full">
+<body class="bg-bg text-text-primary antialiased font-sans flex flex-col min-h-screen">
+  <app-layout page-title="Zen Image Tools" show-back="false">
     <section class="animate-fade-in py-24 text-center">
       <div
         class="inline-block px-4 py-1.5 mb-6 text-xs font-semibold tracking-wider text-accent uppercase bg-accent/10 border border-accent/20 rounded-full">
@@ -156,9 +141,8 @@
         </a>
       </div>
     </section>
-  </main>
-
-  <app-footer></app-footer>
+  </app-layout>
 </body>
+
 
 </html>

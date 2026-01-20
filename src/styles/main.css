@@ -311,3 +311,57 @@ header {
   background-repeat: repeat;
   background-color: #ffffff;
 }
+
+/* Modern Gradient Toggle Switch (Refined Image Based) */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 54px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #1e293b;
+  /* 다크 모드 슬레이트 배경 */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+input:checked+.slider {
+  /* 이미지 레퍼런스와 유사한 민트-블루 그라디언트 */
+  background: linear-gradient(135deg, #2dd4bf, #3b82f6);
+}
+
+input:checked+.slider:before {
+  transform: translateX(26px);
+}
+
+.switch:hover .slider {
+  box-shadow: 0 0 12px rgba(45, 212, 191, 0.2);
+}

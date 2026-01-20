@@ -7,24 +7,10 @@
   <title>zen-image | Image Converter</title>
   <meta name="description" content="이미지를 PNG, JPG, WEBP 등 원하는 포맷으로 자유롭게 변환하세요.">
 
-  <!-- Fonts -->
-  <link rel="stylesheet" href="https://webfontworld.github.io/score/SCoreDream.css">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="src/assets/app-icon.png">
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="src/styles/main.css">
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="src/config/tailwind.config.js"></script>
-
-  <!-- Web Components -->
-  <script type="module" src="src/components/AppHeader.js"></script>
-  <script type="module" src="src/components/AppFooter.js"></script>
+  <!-- App Layout (Handles all common resources: Fonts, Favicon, CSS, Tailwind) -->
   <script type="module" src="src/components/AppLayout.js"></script>
 </head>
+
 
 <body class="bg-bg text-text-primary antialiased font-sans flex flex-col min-h-screen">
   <app-layout page-title="Image Converter">
