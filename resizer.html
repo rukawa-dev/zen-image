@@ -85,6 +85,29 @@
               <span class="slider"></span>
             </label>
           </div>
+
+          <!-- Output Options 추가 -->
+          <div class="mb-6 space-y-4 border-t border-border/30 pt-6">
+            <label class="block text-sm font-bold text-text-secondary uppercase tracking-wider">출력 옵션</label>
+
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" data-format="image/png"
+                class="btn-format active text-xs py-2 rounded-lg border border-border bg-surface hover:border-accent transition-all font-bold">PNG</button>
+              <button type="button" data-format="image/jpeg"
+                class="btn-format text-xs py-2 rounded-lg border border-border bg-surface hover:border-accent transition-all font-bold">JPG</button>
+              <button type="button" data-format="image/webp"
+                class="btn-format text-xs py-2 rounded-lg border border-border bg-surface hover:border-accent transition-all font-bold">WEBP</button>
+            </div>
+
+            <div id="quality-control" class="space-y-2 hidden">
+              <div class="flex justify-between items-center">
+                <label class="text-xs font-bold text-text-secondary uppercase tracking-wider">출력 품질</label>
+                <span id="quality-val" class="text-accent font-mono font-bold text-xs">0.9</span>
+              </div>
+              <input type="range" id="input-quality" min="0.1" max="1.0" step="0.05" value="0.9"
+                class="w-full h-1.5 bg-bg/50 rounded-lg appearance-none cursor-pointer accent-accent">
+            </div>
+          </div>
         </div>
 
         <div id="info-panel" class="hidden mb-8 p-4 bg-bg rounded-xl text-sm">

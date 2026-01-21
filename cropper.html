@@ -87,14 +87,36 @@
             data-ratio="1:1">1:1</button>
         </div>
 
-        <div id="info-panel" class="hidden mb-8 p-4 bg-bg rounded-xl text-sm">
+        <div id="info-panel" class="hidden mb-8 p-4 bg-bg rounded-xl text-sm border border-border/20">
           <div class="flex justify-between mb-2">
             <span>Original:</span>
             <span id="info-original-size" class="font-semibold"></span>
           </div>
-          <div class="flex justify-between">
+          <div class="flex justify-between border-b border-border/30 pb-4 mb-4">
             <span>Result:</span>
             <span id="info-result-size" class="font-semibold text-accent"></span>
+          </div>
+
+          <!-- Output Options 추가 -->
+          <div class="space-y-4">
+            <label class="block text-xs font-bold text-text-secondary uppercase tracking-wider">출력 옵션</label>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" data-format="image/png"
+                class="btn-format active text-[10px] py-2 rounded-lg border border-border bg-surface hover:border-accent transition-all font-bold">PNG</button>
+              <button type="button" data-format="image/jpeg"
+                class="btn-format text-[10px] py-2 rounded-lg border border-border bg-surface hover:border-accent transition-all font-bold">JPG</button>
+              <button type="button" data-format="image/webp"
+                class="btn-format text-[10px] py-2 rounded-lg border border-border bg-surface hover:border-accent transition-all font-bold">WEBP</button>
+            </div>
+
+            <div id="quality-control" class="space-y-2 hidden">
+              <div class="flex justify-between items-center">
+                <label class="text-[10px] font-bold text-text-secondary uppercase tracking-wider">품질</label>
+                <span id="quality-val" class="text-accent font-mono font-bold text-[10px]">0.9</span>
+              </div>
+              <input type="range" id="input-quality" min="0.1" max="1.0" step="0.05" value="0.9"
+                class="w-full h-1.5 bg-bg/50 rounded-lg appearance-none cursor-pointer accent-accent">
+            </div>
           </div>
         </div>
 

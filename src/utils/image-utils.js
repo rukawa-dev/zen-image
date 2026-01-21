@@ -130,3 +130,34 @@ export function trimImage(source, tolerance = 30) {
     info: { minX, minY, maxX, maxY, width: trimWidth, height: trimHeight }
   };
 }
+
+/**
+ * 캔버스를 특정 포맷과 품질로 다운로드
+ * @param {HTMLCanvasElement} canvas 
+ * @param {string} fileName 
+ * @param {string} format 'image/png', 'image/jpeg', 'image/webp'
+ * @param {number} quality 0.0 ~ 1.0
+ */
+export const downloadCanvasImage = (canvas, fileName, format = 'image/png', quality = 0.92) => {
+  // JPG 전환 시 투명도 처리 (흰색 배경)
+  let finalCanvas = canvas;
+  if (format === 'image/jpeg') {
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+    const ctx = tempCanvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+    ctx.drawImage(canvas, 0, 0);
+    finalCanvas = tempCanvas;
+  }
+
+  finalCanvas.toBlob((blob) => {
+    if (!blob) return;
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }, format, quality);
+};

@@ -1,7 +1,9 @@
-import { trimImage } from '../utils/image-utils.js';
+import { trimImage, downloadCanvasImage } from '../utils/image-utils.js';
 
 let originalImage = null;
+let originalFile = null;
 let trimmedCanvas = null;
+let selectedFormat = 'image/png';
 
 const init = () => {
   const dropZone = document.getElementById('drop-zone');
@@ -9,6 +11,9 @@ const init = () => {
   const trimBtn = document.getElementById('btn-trim');
   const downloadBtn = document.getElementById('btn-download');
   const toleranceInput = document.getElementById('input-tolerance');
+  const formatButtons = document.querySelectorAll('.btn-format');
+  const qualityInput = document.getElementById('input-quality');
+  const qualityVal = document.getElementById('quality-val');
 
   if (!dropZone) return;
 
@@ -19,10 +24,34 @@ const init = () => {
   trimBtn.onclick = () => updateTrim();
   downloadBtn.onclick = () => downloadImage();
 
-  // 트리밍 파라미터 변경 시 실시간 반영 (선택 사항이나 실시간이 더 좋으므로 유지)
+  // 트리밍 파라미터 변경 시 실시간 반영
   toleranceInput.oninput = (e) => {
     document.getElementById('tolerance-val').innerText = e.target.value;
     updateTrim();
+  };
+
+  // 포맷 선택 처리
+  formatButtons.forEach(btn => {
+    btn.onclick = () => {
+      formatButtons.forEach(b => {
+        b.classList.remove('active', 'border-accent', 'text-accent');
+        b.classList.add('border-border', 'bg-surface');
+      });
+      btn.classList.add('active', 'border-accent', 'text-accent');
+      btn.classList.remove('border-border', 'bg-surface');
+      selectedFormat = btn.dataset.format;
+
+      const qualityControl = document.getElementById('quality-control');
+      if (selectedFormat === 'image/jpeg' || selectedFormat === 'image/webp') {
+        qualityControl.classList.remove('hidden');
+      } else {
+        qualityControl.classList.add('hidden');
+      }
+    };
+  });
+
+  qualityInput.oninput = (e) => {
+    qualityVal.textContent = e.target.value;
   };
 
   dropZone.ondragover = (e) => {
@@ -49,6 +78,13 @@ const handleFile = (file) => {
     const img = new Image();
     img.onload = () => {
       originalImage = img;
+      originalFile = file;
+
+      // 파일 타입에 맞춰 기본 포맷 설정 (자동 감지)
+      const mimeType = file.type;
+      const formatBtn = document.querySelector(`.btn-format[data-format="${mimeType}"]`);
+      if (formatBtn) formatBtn.click();
+
       updateTrim();
     };
     img.src = e.target.result;
@@ -61,7 +97,7 @@ const updateTrim = () => {
 
   const tolerance = parseInt(document.getElementById('input-tolerance').value);
 
-  // 배경 감지 및 트리밍 실행 (정보와 함께 반환)
+  // 배경 감지 및 트리밍 실행
   const result = trimImage(originalImage, tolerance);
   trimmedCanvas = result.canvas;
 
@@ -99,10 +135,11 @@ const showPreview = (origImg, result) => {
 const downloadImage = () => {
   if (!trimmedCanvas) return;
 
-  const link = document.createElement('a');
-  link.href = trimmedCanvas.toDataURL('image/png');
-  link.download = `zen-trim-${Date.now()}.png`;
-  link.click();
+  const quality = parseFloat(document.getElementById('input-quality').value);
+  const ext = selectedFormat.split('/')[1].replace('jpeg', 'jpg');
+  const fileName = `zen-trim-${Date.now()}.${ext}`;
+
+  downloadCanvasImage(trimmedCanvas, fileName, selectedFormat, quality);
 };
 
 document.addEventListener('DOMContentLoaded', init);
