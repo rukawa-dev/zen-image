@@ -17,11 +17,11 @@
     }
   </style>
 
-  <!-- 2. Tailwind (Local library for stability) -->
-  <script src="src/libs/tailwindcss_3.4.5.js"></script>
-  <script src="src/config/tailwind.config.js"></script>
+  <!-- 3. Libraries -->
+  <script src="src/libs/pako.min.js"></script>
+  <script src="src/libs/UPNG.js"></script>
 
-  <!-- 3. Components -->
+  <!-- 4. Components -->
   <script type="module" src="src/components/AppLayout.js"></script>
 </head>
 
@@ -99,7 +99,7 @@
                 class="btn-format text-xs py-2 rounded-lg border border-border bg-surface hover:border-accent transition-all font-bold">WEBP</button>
             </div>
 
-            <div id="quality-control" class="space-y-2 hidden">
+            <div id="quality-control" class="space-y-2">
               <div class="flex justify-between items-center">
                 <label class="text-xs font-bold text-text-secondary uppercase tracking-wider">출력 품질</label>
                 <span id="quality-val" class="text-accent font-mono font-bold text-xs">0.9</span>

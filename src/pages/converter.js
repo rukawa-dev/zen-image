@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 품질 조절 UI 토글 (JPG, WEBP일 때만 노출)
   const updateQualityUI = () => {
-    if (selectedFormat === 'image/jpeg' || selectedFormat === 'image/webp') {
+    if (selectedFormat === 'image/jpeg' || selectedFormat === 'image/webp' || selectedFormat === 'image/png') {
       qualityControl.classList.remove('hidden');
     } else {
       qualityControl.classList.add('hidden');

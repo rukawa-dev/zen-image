@@ -18,11 +18,11 @@
     }
   </style>
 
-  <!-- 2. Tailwind (Local library for stability) -->
-  <script src="src/libs/tailwindcss_3.4.5.js"></script>
-  <script src="src/config/tailwind.config.js"></script>
+  <!-- 3. Libraries -->
+  <script src="src/libs/pako.min.js"></script>
+  <script src="src/libs/UPNG.js"></script>
 
-  <!-- 3. Components -->
+  <!-- 4. Components -->
   <script type="module" src="src/components/AppLayout.js"></script>
 </head>
 
@@ -80,7 +80,7 @@
           </div>
 
           <!-- Quality Control -->
-          <div id="quality-control" class="space-y-4 hidden animate-fade-in">
+          <div id="quality-control" class="space-y-4 animate-fade-in">
             <div class="flex justify-between items-center">
               <label class="text-sm font-bold text-text-secondary uppercase tracking-wider">원본 품질 유지</label>
               <span id="quality-val" class="text-accent font-mono font-bold">0.9</span>

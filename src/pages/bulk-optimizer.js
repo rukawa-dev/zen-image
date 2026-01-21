@@ -1,7 +1,7 @@
 import { formatBytes, downloadCanvasImage } from '../utils/image-utils.js';
 
 let fileQueue = [];
-let selectedFormat = 'image/png';
+let selectedFormat = 'auto';
 let selectedQuality = 0.9;
 
 const init = () => {
@@ -43,7 +43,7 @@ const init = () => {
       selectedFormat = btn.dataset.format;
 
       const qualityControl = document.getElementById('quality-control');
-      if (selectedFormat === 'image/jpeg' || selectedFormat === 'image/webp') {
+      if (selectedFormat === 'auto' || selectedFormat === 'image/jpeg' || selectedFormat === 'image/webp' || selectedFormat === 'image/png') {
         qualityControl.classList.remove('hidden');
       } else {
         qualityControl.classList.add('hidden');
@@ -114,8 +114,17 @@ const updateUI = () => {
       <td class="px-6 py-4 text-center">
         ${getStatusBadge(item.status)}
       </td>
-      <td class="px-6 py-4 text-right">
-        <button onclick="window.removeFile('${item.id}')" class="text-text-secondary hover:text-red-500 transition-colors p-2">
+      <td class="px-6 py-4 text-right flex justify-end gap-2">
+        ${item.status === 'completed' ? `
+          <button onclick="window.downloadSingleFile('${item.id}')" class="text-accent hover:text-accent-hover transition-colors p-2" title="이 파일만 다운로드">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </button>
+        ` : ''}
+        <button onclick="window.removeFile('${item.id}')" class="text-text-secondary hover:text-red-500 transition-colors p-2" title="제거">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -167,18 +176,30 @@ const optimizeImage = (file) => {
         canvas.height = img.naturalHeight;
         const ctx = canvas.getContext('2d');
 
+        const currentFormat = selectedFormat === 'auto' ? file.type : selectedFormat;
+
         // JPG 변환 시 배경 채우기 로직은 downloadCanvasImage 내부에 있지만 
         // 용량 계산을 위해 여기서도 수행 (최적화)
         let finalCanvas = canvas;
-        if (selectedFormat === 'image/jpeg') {
+        if (currentFormat === 'image/jpeg') {
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
         ctx.drawImage(img, 0, 0);
 
+        // PNG 손실 압축 지원 (UPNG.js 사용)
+        if (currentFormat === 'image/png' && selectedQuality < 1.0) {
+          import('../utils/image-utils.js').then(({ compressPNGWithUPNG }) => {
+            compressPNGWithUPNG(canvas, selectedQuality).then(blob => {
+              resolve({ canvas, blob });
+            });
+          });
+          return;
+        }
+
         canvas.toBlob((blob) => {
           resolve({ canvas, blob });
-        }, selectedFormat, selectedQuality);
+        }, currentFormat, selectedQuality);
       };
       img.onerror = reject;
       img.src = e.target.result;
@@ -194,9 +215,10 @@ const downloadAll = () => {
     // 다운로드 간격 조정을 위해 약간의 딜레이 (브라우저 정책 우회)
     setTimeout(() => {
       const originalName = item.file.name.split('.')[0];
-      const ext = selectedFormat.split('/')[1].replace('jpeg', 'jpg');
+      const targetFormat = selectedFormat === 'auto' ? item.file.type : selectedFormat;
+      const ext = targetFormat.split('/')[1].replace('jpeg', 'jpg');
       const fileName = `${originalName}_zen.${ext}`;
-      downloadCanvasImage(item.resultCanvas, fileName, selectedFormat, selectedQuality);
+      downloadCanvasImage(item.resultCanvas, fileName, targetFormat, selectedQuality);
     }, index * 200);
   });
 };
@@ -210,6 +232,17 @@ const clearQueue = () => {
 window.removeFile = (id) => {
   fileQueue = fileQueue.filter(item => item.id !== id);
   updateUI();
+};
+
+window.downloadSingleFile = (id) => {
+  const item = fileQueue.find(it => it.id === id);
+  if (!item || !item.resultCanvas) return;
+
+  const originalName = item.file.name.split('.')[0];
+  const targetFormat = selectedFormat === 'auto' ? item.file.type : selectedFormat;
+  const ext = targetFormat.split('/')[1].replace('jpeg', 'jpg');
+  const fileName = `${originalName}_zen.${ext}`;
+  downloadCanvasImage(item.resultCanvas, fileName, targetFormat, selectedQuality);
 };
 
 document.addEventListener('DOMContentLoaded', init);

@@ -136,12 +136,16 @@ export function trimImage(source, tolerance = 30) {
  * @param {HTMLCanvasElement} canvas 
  * @param {string} fileName 
  * @param {string} format 'image/png', 'image/jpeg', 'image/webp'
- * @param {number} quality 0.0 ~ 1.0
+ * @param {number} quality 0.0 ~ 1.0 (PNG의 경우 색상 수 결정에 사용)
  */
-export const downloadCanvasImage = (canvas, fileName, format = 'image/png', quality = 0.92) => {
-  // JPG 전환 시 투명도 처리 (흰색 배경)
-  let finalCanvas = canvas;
-  if (format === 'image/jpeg') {
+export const downloadCanvasImage = async (canvas, fileName, format = 'image/png', quality = 0.92) => {
+  let blob;
+
+  if (format === 'image/png' && quality < 1.0) {
+    // UPNG.js를 사용한 손실 압축
+    blob = await compressPNGWithUPNG(canvas, quality);
+  } else if (format === 'image/jpeg') {
+    // JPG 전환 시 투명도 처리 (흰색 배경)
     const tempCanvas = document.createElement('canvas');
     tempCanvas.width = canvas.width;
     tempCanvas.height = canvas.height;
@@ -149,15 +153,43 @@ export const downloadCanvasImage = (canvas, fileName, format = 'image/png', qual
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
     ctx.drawImage(canvas, 0, 0);
-    finalCanvas = tempCanvas;
+    blob = await new Promise(resolve => tempCanvas.toBlob(resolve, 'image/jpeg', quality));
+  } else {
+    // 기본 브라우저 API (WEBP, Lossless PNG 등)
+    blob = await new Promise(resolve => canvas.toBlob(resolve, format, quality));
   }
 
-  finalCanvas.toBlob((blob) => {
-    if (!blob) return;
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = fileName;
-    link.click();
-    URL.revokeObjectURL(link.href);
-  }, format, quality);
+  if (!blob) return;
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(link.href), 100);
+};
+
+/**
+ * UPNG.js를 사용하여 PNG 이미지를 손실 압축
+ * @param {HTMLCanvasElement} canvas 
+ * @param {number} quality 0.0 ~ 1.0
+ * @returns {Promise<Blob>}
+ */
+export const compressPNGWithUPNG = (canvas, quality) => {
+  return new Promise((resolve) => {
+    if (typeof UPNG === 'undefined') {
+      console.warn('UPNG.js is not loaded. Falling back to default PNG.');
+      canvas.toBlob(resolve, 'image/png');
+      return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    
+    // quality에 따라 색상 수 결정 (0.0~1.0 -> 2~256 colors)
+    // 0.9 -> 약 230색, 0.5 -> 약 128색 등으로 매핑
+    const colors = Math.max(2, Math.round(256 * quality));
+    
+    const output = UPNG.encode([imgData.data.buffer], canvas.width, canvas.height, colors);
+    const blob = new Blob([output], { type: 'image/png' });
+    resolve(blob);
+  });
 };

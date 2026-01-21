@@ -42,7 +42,7 @@ const init = () => {
       selectedFormat = btn.dataset.format;
 
       const qualityControl = document.getElementById('quality-control');
-      if (selectedFormat === 'image/jpeg' || selectedFormat === 'image/webp') {
+      if (selectedFormat === 'image/jpeg' || selectedFormat === 'image/webp' || selectedFormat === 'image/png') {
         qualityControl.classList.remove('hidden');
       } else {
         qualityControl.classList.add('hidden');
